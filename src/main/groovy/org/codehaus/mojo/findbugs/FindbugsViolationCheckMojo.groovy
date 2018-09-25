@@ -456,8 +456,8 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter( property="findbugs.maxAllowedViolations" )
-    int maxAllowedViolations = 0;
+    @Parameter( property="findbugs.maxAllowedViolations" , defaultValue = "0")
+    int maxAllowedViolations
 
 	void execute() {
 		Locale locale = Locale.getDefault()
@@ -502,7 +502,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
                 if (total <= 0) {
                     log.info('No errors/warnings found')
                     return
-                }else if( maxAllowedViolations != 0 && total <= maxAllowedViolations){
+                }else if( maxAllowedViolations > 0 && total <= maxAllowedViolations){
                     log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations)
                     return;
                 }
