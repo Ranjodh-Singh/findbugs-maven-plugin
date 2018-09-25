@@ -449,6 +449,16 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
 
 	int errorCount
 
+    /**
+     * <p>
+     * specified max number of violations which can be ignored by the findbugs.
+     * </p>
+     *
+     * @since 2.4.1
+     */
+    @Parameter( property="findbugs.maxAllowedViolations" )
+    int maxAllowedViolations = 0;
+
 	void execute() {
 		Locale locale = Locale.getDefault()
 		List sourceFiles
@@ -492,6 +502,9 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
                 if (total <= 0) {
                     log.info('No errors/warnings found')
                     return
+                }else if( maxAllowedViolations != 0 && total <= maxAllowedViolations){
+                    log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations)
+                    return;
                 }
 
                 log.info('Total bugs: ' + total)
