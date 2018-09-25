@@ -503,15 +503,13 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
                     log.info('No errors/warnings found')
                     return
                 }else if( maxAllowedViolations > 0 && total <= maxAllowedViolations){
-                    log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations)
+                    log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
+                    printbugs(total, bugs)
                     return;
                 }
 
                 log.info('Total bugs: ' + total)
-                for (i in 0..total-1) {
-                    def bug = bugs[i]
-                    log.info( bug.LongMessage.text() + FindBugsInfo.BLANK + bug.SourceLine.'@classname' + FindBugsInfo.BLANK + bug.SourceLine.Message.text() + FindBugsInfo.BLANK + bug.'@type')
-                }
+                printbugs(total, bugs)
 
                 log.info('\n\n\nTo see bug detail using the Findbugs GUI, use the following command "mvn findbugs:gui"\n\n\n')
 
@@ -524,5 +522,12 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
 			log.debug("Nothing for FindBugs to do here.")
 		}
 	}
+
+    private void printbugs(total, bugs) {
+        for (i in 0..total - 1) {
+            def bug = bugs[i]
+            log.info(bug.LongMessage.text() + FindBugsInfo.BLANK + bug.SourceLine.'@classname' + FindBugsInfo.BLANK + bug.SourceLine.Message.text() + FindBugsInfo.BLANK + bug.'@type')
+        }
+    }
 
 }
